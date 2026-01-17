@@ -1,5 +1,3 @@
-export default function handler(req, res) {
-  res.setHeader('Content-Type', 'text/plain');
-  res.status(200).send('Prime Forge API ready
-');
+export default function (req, res) {
+  res.status(200).setHeader('Content-Type', 'text/plain').send('Prime Forge API v1 ready');
 }
