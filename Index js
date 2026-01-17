@@ -1,6 +1,9 @@
-console.log('Prime Forge online');
 const http = require('http');
+
 http.createServer((req, res) => {
-  res.end('Prime Forge API ready');
-}).listen(3000);
-```[4]  
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Prime Forge API ready
+');
+}).listen(process.env.PORT || 3000, () => {
+  console.log('Prime Forge online');
+});
