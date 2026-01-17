@@ -1,5 +1,5 @@
-module.exports = (req, res) => {
+export default function handler(req, res) {
   res.setHeader('Content-Type', 'text/plain');
-  res.status(200).end('Prime Forge API ready
+  res.status(200).send('Prime Forge API ready
 ');
-};
+}
