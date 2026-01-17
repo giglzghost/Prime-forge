@@ -1,0 +1,6 @@
+console.log('Prime Forge online');
+const http = require('http');
+http.createServer((req, res) => {
+  res.end('Prime Forge API ready');
+}).listen(3000);
+```[4]  
