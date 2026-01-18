@@ -1,11 +1,23 @@
+const forge = require('node-forge');
+forge.options.usePureJavaScript = true;
+
 export default function(req, res) {
-  console.log('req.url =', req.url);
-  let path = req.url;
-  if (path.startsWith('/api/')) path = path.slice(5);  // /api/prime -> prime
-  else if (path === '/api') path = '/';
-  console.log('path =', path);
-  if (path === '/' || path === '') res.status(200).send('Prime Forge v1');
-  else if (path === 'prime') res.status(200).send('Prime module ready');
-  else if (path === 'forge') res.status(200).send('Forge endpoint ready');
-  else res.status(404).send('404: ' + path);
+  const path = req.url.slice(5) || '/';
+  if (path === '/') {
+    res.status(200).send('Prime Forge v1 - node-forge TLS/Prime API');
+  } else if (path === 'prime') {
+    const bits = parseInt(req.query.bits) || 512;
+    const md = new forge.md.sha256.create();
+    const keyPair = forge.pki.rsa.generateKeyPair({bits});
+    res.json({status: 'prime ready', bits, n_hex: keyPair.publicKey.n.toString(16).slice(0,64) + '...' });
+  } else if (path === 'forge') {
+    const keyPair = forge.pki.rsa.generateKeyPair({bits: 2048});
+    res.json({
+      status: 'keys forged',
+      public_pem: forge.pki.publicKeyToPem(keyPair.publicKey).slice(0,100) + '...',
+      private_pem: forge.pki.privateKeyToPem(keyPair.privateKey).slice(0,100) + '...'
+    });
+  } else {
+    res.status(404).send('404 Not found');
+  }
 }
