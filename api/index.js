@@ -2,11 +2,8 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
-app.all('*', (req, res) => {
-  const path = req.path.slice(1) || 'root';
-  if (path === 'prime') return res.send('Prime ready');
-  if (path === 'forge') return res.send('Forge ready');
-  res.send('Prime Forge API v1');
-});
+app.get('/', (req, res) => res.json({ status: 'Prime Forge v1' }));
+app.get('/prime', (req, res) => res.json({ module: 'prime', ready: true }));
+app.get('/forge', (req, res) => res.json({ endpoint: 'forge', ready: true }));
 
 module.exports = app;
