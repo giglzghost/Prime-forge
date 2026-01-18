@@ -2,18 +2,26 @@ const forge = require('node-forge');
 forge.options.usePureJavaScript = true;
 
 export default function(req, res) {
-  const path = req.url.slice(1);  // /prime -> prime
-  if (path === 'api') {
+  const path = req.url.slice(5) || '/';
+  if (path === '/') {
     res.status(200).send('Prime Forge v1 - node-forge TLS/Prime API');
   } else if (path === 'prime') {
     const bits = parseInt(req.query.bits) || 512;
-    const keyPair = forge.pki.rsa.generateKeyPair({bits: bits});
-    const n_hex = keyPair.publicKey.n.toString(16);
-    res.json({status: 'prime ready', bits, n_hex: n_hex.slice(0,64) + '...' });
+    const md = new forge.md.sha256.create();
+    const rs = forge.random.getBytesSync(bits / 8);
+    forge.prime.generate(bits, {state: rs, md: md}, (err, num) => {
+      if (err) {
+        return res.status(500).json({error: err.message});
+      }
+      res.status(200).json({
+        prime: num.toString(),
+        bits: bits
+      });
+    });
   } else if (path === 'forge') {
-    const keyPair = forge.pki.rsa.generateKeyPair({bits: 2048});
-    res.json({
-      status: 'keys forged',
+    const bits = parseInt(req.query.bits) || 2048;
+    const keyPair = forge.pki.rsa.generateKeyPair(bits);
+    res.status(200).json({
       public_pem: forge.pki.publicKeyToPem(keyPair.publicKey).slice(0,100) + '...',
       private_pem: forge.pki.privateKeyToPem(keyPair.privateKey).slice(0,100) + '...'
     });
