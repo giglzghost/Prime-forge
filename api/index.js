@@ -1,9 +1,7 @@
-const express = require('express');
-const app = express();
-app.use(express.json());
-
-app.get('/', (req, res) => res.json({ status: 'Prime Forge v1' }));
-app.get('/prime', (req, res) => res.json({ module: 'prime', ready: true }));
-app.get('/forge', (req, res) => res.json({ endpoint: 'forge', ready: true }));
-
-module.exports = app;
+export default function(req, res) {
+  const p = req.url.slice(4) || '/';  // strip /api
+  if (p === '/' || p === '') return res.status(200).send('Prime Forge v1');
+  if (p === '/prime') return res.status(200).send('Prime module ready');
+  if (p === '/forge') return res.status(200).send('Forge endpoint ready');
+  res.status(404).send('Not found');
+}
