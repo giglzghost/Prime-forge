@@ -1,12 +1,15 @@
-const router = require('../utils/allrouter.js');
-
 module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   
-  try {
-    const result = await router.handlePrimeForgeRequest(req);
-    res.status(200).end(JSON.stringify(result));
-  } catch (e) {
-    res.status(500).end(JSON.stringify({error: 'Router error'}));
-  }
+  const params = new URLSearchParams(req.url.split('?')[1] || '');
+  const mode = params.get('mode') || 'prime';
+  
+  const result = {
+    status: 'Prime Forge API v1 LIVE',
+    mode,
+    path: req.url,
+    timestamp: new Date().toISOString()
+  };
+  
+  res.status(200).end(JSON.stringify(result));
 };
