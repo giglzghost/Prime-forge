@@ -1,24 +1,12 @@
-// api/forge.js
-import { handlePrimeForgeRequest } from '../utils/aiRouter.js';
+const forge = require('node-forge');
 
-export default async function handler(req, res) {
-  try {
-    const { method, query, body } = req;
-
-    if (method !== 'GET' && method !== 'POST') {
-      res.setHeader('Allow', ['GET', 'POST']);
-      return res.status(405).json({ error: 'method_not_allowed' });
-    }
-
-    const result = await handlePrimeForgeRequest({
-      mode: 'forge',
-      body: method === 'POST' ? body : null,
-      query
-    });
-
-    return res.status(200).json(result);
-  } catch (err) {
-    console.error('Forge error:', err);
-    return res.status(500).json({ error: 'internal_error', details: String(err) });
-  }
-}
+module.exports = async (req, res) => {
+  const bits = parseInt(new URLSearchParams(req.url.split('?')[1]).get('bits')) || 2048;
+  const keyPair = forge.pki.rsa.generateKeyPair(bits);
+  res.status(200).json({
+    mode: 'forge',
+    bits,
+    public_pem: forge.pki.publicKeyToPem(keyPair.publicKey).slice(0, 100) + '...',
+    private_pem: forge.pki.privateKeyToPem(keyPair.privateKey).slice(0, 100) + '...'
+  });
+};
