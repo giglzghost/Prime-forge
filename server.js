@@ -3,17 +3,33 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static('.'));
+app.use(express.static(path.join(__dirname, '.')));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// API proxy/mount - serves api/ handlers
 app.use('/api', (req, res, next) => {
-  // Proxy to api/ handlers if Vercel-style
-  const apiIndex = require('./api/index');
-  apiIndex(req, res, next);
-}, express.static(path.join(__dirname, 'api')));
+  try {
+    const apiHandler = require(path.join(__dirname, 'api', 'index'));
+    apiHandler(req, res, next);
+  } catch (err) {
+    res.status(500).json({ error: 'API init failed', details: err.message });
+  }
+});
 
-app.get('/', (req, res) => res.send('PrimeForge Live!'));
-app.get('/status', (req, res) => res.json({ status: 'Active', platform: 'Azure' }));
+// Routes
+app.get('/', (req, res) => res.send('PrimeForge Live on Azure!'));
+app.get('/status', (req, res) => res.json({ 
+  status: 'Active', 
+  platform: 'Azure App Service', 
+  uptime: process.uptime(),
+  timestamp: new Date().toISOString()
+}));
+app.get('/health', (req, res) => res.json({ healthy: true }));
 
-app.listen(port, () => {
-  console.log(`PrimeForge on port ${port}`);
+// 404 fallback
+app.use((req, res) => res.status(404).json({ error: 'PrimeForge: Endpoint not found' }));
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`PrimeForge listening on port ${port} (0.0.0.0)`);
 });
