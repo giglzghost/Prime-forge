@@ -1,34 +1,11 @@
-// utils/aiRouter.js
-export async function handlePrimeForgeRequest({ mode, body, query }) {
-  // mode: 'prime' | 'forge'
-  const timestamp = new Date().toISOString();
+import { handlePrimeForgeRequest } from '../utils/allrouter.js';
 
-  // Placeholder logic – later, call OpenAI/Azure/etc here
-  const base = {
-    mode,
-    received: { body, query },
-    timestamp
-  };
-
-  if (mode === 'prime') {
-    return {
-      ...base,
-      role: 'strategic_control',
-      message: 'Prime online and routing empire directives.'
-    };
+export default async function handler(req, res) {
+  try {
+    const result = await handlePrimeForgeRequest(req);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed' });
   }
-
-  if (mode === 'forge') {
-    return {
-      ...base,
-      role: 'execution_engine',
-      message: 'Forge online and executing build/deploy tasks.'
-    };
-  }
-
-  return {
-    ...base,
-    role: 'unknown',
-    message: 'Unknown mode.'
-  };
 }
