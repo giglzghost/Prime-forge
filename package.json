@@ -1,10 +1,17 @@
 {
   "name": "primeforge",
   "version": "1.0.0",
+  "description": "PrimeForge AI platform",
+  "main": "server.js",
   "scripts": {
-    "start": "node ."
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pm2": "^5.3.1"
   }
 }
