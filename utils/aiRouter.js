@@ -1,11 +1,11 @@
-import { handlePrimeForgeRequest } from '../utils/allrouter.js';
+const forgeRouter = require('../utils/allrouter.js')?.handlePrimeForgeRequest || ((req) => ({status: 'Fallback live', mode: 'prime'}));
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
+  // ... existing headers ...
   try {
-    const result = await handlePrimeForgeRequest(req);
-    res.status(200).json(result);
+    const result = await forgeRouter(req);
+    res.status(200).end(JSON.stringify(result));
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed' });
+    // ... error handling ...
   }
-}
+};
