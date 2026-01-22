@@ -1,2 +1,2 @@
-module.exports = async (req, res) => {
-  res.setHeader('Content-Type
+module.exports = async function (req, res) {
+  res.set
