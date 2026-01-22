@@ -1,11 +1,11 @@
-const forgeRouter = require('../utils/allrouter.js')?.handlePrimeForgeRequest || ((req) => ({status: 'Fallback live', mode: 'prime'}));
+const forge = require('node-forge');
 
-module.exports = async (req, res) => {
-  // ... existing headers ...
-  try {
-    const result = await forgeRouter(req);
-    res.status(200).end(JSON.stringify(result));
-  } catch (error) {
-    // ... error handling ...
-  }
-};
+function handlePrime(bits, callback) {
+  forge.prime.generateProbablePrime(bits, callback);
+}
+
+function handleForge(bits) {
+  return forge.pki.rsa.generateKeyPair(bits);
+}
+
+module.exports = { handlePrime, handleForge };
