@@ -1,0 +1,16 @@
+{
+  "name": "prime-forge-core",
+  "version": "1.0.0",
+  "description": "Prime Forge autonomous AI API (prime / forge routes)",
+  "main": "api/prime.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node api/prime.js",
+    "test": "echo \"no tests yet\""
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
