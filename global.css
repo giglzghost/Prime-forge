@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .matriarch-hero { @apply mx-auto mb-16 w-96 h-96 rounded-full object-cover shadow-[0_25px_50px_rgba(139,92,246,0.4)]; }
+  .archetype-thumb { @apply w-28 h-28 rounded-2xl object-cover shadow-lg hover:scale-110 hover:rotate-1 transition-all; }
+  .journey-card { @apply w-full h-60 rounded-3xl object-cover shadow-xl hover:shadow-2xl; }
+}
+body { background: linear-gradient(to bottom, #0c0a1f, #1e0f33); color: #f1f5f9; font-family: 'Inter', sans-serif; }
