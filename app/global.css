@@ -1,0 +1,6 @@
+:root {
+  --bg-gradient: linear-gradient(135deg, #8b5cf6 0%, #1e3a8a 100%);
+  --neon: #10b981;
+}
+body { margin: 0; font-family: system-ui; background: var(--bg-gradient); color: white; }
+pre { background: #1f2937; padding: 1rem; border-radius: 0.5rem; }
